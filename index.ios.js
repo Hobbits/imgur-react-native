@@ -21,11 +21,17 @@ var Imgur = React.createClass({
       image: image,
     })
   },
+  loadGallery: function() {
+    this.setState({
+      count: this.state.count+10
+    })
+  },
   getInitialState: function() {
     return {
       image: {},
       gallery: [],
       loaded: false,
+      count: 10,
     };
   },
   componentDidMount: function() {
@@ -46,10 +52,14 @@ var Imgur = React.createClass({
     if (!this.state.loaded) {
       return (<Loading />);
     }
+    var gallery = this.state.gallery.slice(0, this.state.count);
     return (
       <View style={styles.container}>
         <Post image={this.state.image}/>
-        <ScrollGallery gallery={this.state.gallery} selectImage={this.selectImage}/>
+        <ScrollGallery 
+          gallery={gallery} 
+          selectImage={this.selectImage}
+          loadGallery={this.loadGallery} />
       </View>
     );
   }

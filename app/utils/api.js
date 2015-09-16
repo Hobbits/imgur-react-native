@@ -3,7 +3,7 @@ var deviceWidth = require('Dimensions').get('window').width;
 var obj = {  
   method: 'GET',
   headers: {
-    Authorization: 'Client-ID YOUR_CLIENT_ID',
+    Authorization: 'Client-ID 030c3a6c42625ef',
   }
 };
 

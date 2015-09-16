@@ -17,7 +17,13 @@ var ScrollGallery = React.createClass({
         style={styles.scrollbar}
         contentContainerStyle={styles.container}
         automaticallyAdjustContentInsets={false}
-        horizontal={true}>
+        horizontal={true}
+        onScroll={function(scroll) {
+          var event = scroll.nativeEvent;
+          if (event.contentOffset.x + event.layoutMeasurement.width >= event.contentSize.width) {
+            this.props.loadGallery();
+          }
+        }.bind(this)}>
         {images}
        </ScrollView>
 		);
