@@ -1,20 +1,24 @@
 var React = require('react-native');
+var Thumbnail = require('./Thumbnail');
 var {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableHighlight,
 } = React;
 
 var ScrollGallery = React.createClass({
 	render: function() {
+    var images = this.props.gallery.map(function(image) {
+      return <Thumbnail key={image.id} thumbnail={image} selectImage={this.props.selectImage}/>
+    }.bind(this));
 		return (
 			<ScrollView
+        ref="scroll"
         style={styles.scrollbar}
-        horizontal={true}
-        scrollEventThrottle={200}>
-        <Text>Hello</Text>
+        contentContainerStyle={styles.container}
+        automaticallyAdjustContentInsets={false}
+        horizontal={true}>
+        {images}
        </ScrollView>
 		);
 	}
@@ -22,7 +26,8 @@ var ScrollGallery = React.createClass({
 
 var styles = StyleSheet.create({
   scrollbar: {
-    flex: 0.4,
+    flex: 0.3,
+    backgroundColor: '#2B2B2B',
   },
 });
 

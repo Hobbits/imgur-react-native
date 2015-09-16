@@ -5,26 +5,51 @@
 'use strict';
 
 var React = require('react-native');
+var Loading = require('./app/components/Loading');
+var Post = require('./app/components/Post');
+var ScrollGallery = require('./app/components/ScrollGallery');
+var api = require('./app/utils/api');
 var {
   AppRegistry,
   StyleSheet,
-  Text,
   View,
 } = React;
 
 var Imgur = React.createClass({
+  selectImage: function(image) {
+    this.setState({
+      image: image,
+    })
+  },
+  getInitialState: function() {
+    return {
+      image: {},
+      gallery: [],
+      loaded: false,
+    };
+  },
+  componentDidMount: function() {
+    api.getGallery().then(function(res) {
+      if (res.success) {
+        var gallery = res.data.filter(function(post) {
+          return !post.is_album && !post.animated;
+        })
+        this.setState({
+          image: gallery[0],
+          gallery: gallery,
+          loaded: true,
+        });
+      }
+    }.bind(this))
+  },
   render: function() {
+    if (!this.state.loaded) {
+      return (<Loading />);
+    }
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
+        <Post image={this.state.image}/>
+        <ScrollGallery gallery={this.state.gallery} selectImage={this.selectImage}/>
       </View>
     );
   }
@@ -33,19 +58,7 @@ var Imgur = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    backgroundColor: '#2B2B2B',
   },
 });
 
